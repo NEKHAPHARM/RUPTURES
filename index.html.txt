@@ -1,0 +1,35 @@
+const firebase = require("firebase/app");
+require("firebase/database");
+require("firebase/messaging");
+
+// Configuration Firebase
+const firebaseConfig = {
+  apiKey: "VOTRE_API_KEY",
+  authDomain: "VOTRE_AUTH_DOMAIN",
+  databaseURL: "VOTRE_DATABASE_URL",
+  projectId: "VOTRE_PROJECT_ID",
+  storageBucket: "VOTRE_STORAGE_BUCKET",
+  messagingSenderId: "VOTRE_MESSAGING_SENDER_ID",
+  appId: "VOTRE_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+// Ajouter un médicament
+function ajouterMedicament(nom) {
+  db.ref('medicaments/' + nom).set({ nom: nom, disponible: false });
+}
+
+// Écouter les changements de disponibilité
+db.ref('medicaments').on('child_changed', (snapshot) => {
+  const medicament = snapshot.val();
+  if (medicament.disponible) {
+    envoyerNotification(medicament.nom);
+  }
+});
+
+// Exemple de notification
+function envoyerNotification(nom) {
+  console.log(`Le médicament ${nom} est maintenant disponible !`);
+}
