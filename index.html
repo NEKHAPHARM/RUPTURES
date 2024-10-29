@@ -36,7 +36,7 @@
   const analytics = getAnalytics(app);
 </script>
 
-        // Fonction pour ajouter un médicament
+  // Fonction pour ajouter un médicament
         function ajouterMedicament() {
     const medicament = document.getElementById('medicament').value;
     if (medicament) {
@@ -54,7 +54,7 @@
     }
 }
 
-        // Écoute des changements de disponibilité
+  // Écoute des changements de disponibilité
         db.ref('medicaments').on('child_changed', (snapshot) => {
             const medicament = snapshot.val();
             if (medicament.disponible) {
@@ -62,7 +62,7 @@
             }
         });
 
-        // Exemple de notification
+  // Exemple de notification
         function envoyerNotification(nom) {
             console.log(`Le médicament ${nom} est maintenant disponible !`);
         }
