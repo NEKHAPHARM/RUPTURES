@@ -12,49 +12,35 @@
     <button onclick="ajouterMedicament()">Ajouter</button>
     <ul id="listeMedicaments"></ul>
 
- <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "VOTRE_API_KEY",
+            authDomain: "VOTRE_AUTH_DOMAIN",
+            databaseURL: "VOTRE_DATABASE_URL",
+            projectId: "VOTRE_PROJECT_ID",
+            storageBucket: "VOTRE_STORAGE_BUCKET",
+            messagingSenderId: "VOTRE_MESSAGING_SENDER_ID",
+            appId: "VOTRE_APP_ID"
+        };
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDOLgAmxhMIV4tO9jRmW-udDrirqgAT4qk",
-    authDomain: "ruptures-d353d.firebaseapp.com",
-    projectId: "ruptures-d353d",
-    storageBucket: "ruptures-d353d.appspot.com",
-    messagingSenderId: "91542075343",
-    appId: "1:91542075343:web:afbf13e85b2fb5266c44ba",
-    measurementId: "G-GMWM7QL31Q"
-  };
+        // Initialisation de Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-
-  // Fonction pour ajouter un médicament
+        // Fonction pour ajouter un médicament
         function ajouterMedicament() {
-    const medicament = document.getElementById('medicament').value;
-    if (medicament) {
-        db.ref('medicaments/' + medicament).set({
-            nom: medicament,
-            disponible: false
-        }).then(() => {
-            console.log(`Médicament ${medicament} ajouté !`); // Confirmation dans la console
-        }).catch((error) => {
-            console.error("Erreur d'ajout : ", error); // Affiche l'erreur s'il y en a une
-        });
-        document.getElementById('medicament').value = ''; // Réinitialiser l'input
-    } else {
-        console.log("Veuillez entrer un nom de médicament."); // Message d'erreur
-    }
-}
+            const medicament = document.getElementById('medicament').value;
+            if (medicament) {
+                db.ref('medicaments/' + medicament).set({
+                    nom: medicament,
+                    disponible: false
+                });
+                document.getElementById('medicament').value = ''; // Réinitialiser l'input
+            }
+        }
 
-  // Écoute des changements de disponibilité
+        // Écoute des changements de disponibilité
         db.ref('medicaments').on('child_changed', (snapshot) => {
             const medicament = snapshot.val();
             if (medicament.disponible) {
@@ -62,7 +48,7 @@
             }
         });
 
-  // Exemple de notification
+        // Exemple de notification
         function envoyerNotification(nom) {
             console.log(`Le médicament ${nom} est maintenant disponible !`);
         }
