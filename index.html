@@ -30,15 +30,21 @@
 
         // Fonction pour ajouter un médicament
         function ajouterMedicament() {
-            const medicament = document.getElementById('medicament').value;
-            if (medicament) {
-                db.ref('medicaments/' + medicament).set({
-                    nom: medicament,
-                    disponible: false
-                });
-                document.getElementById('medicament').value = ''; // Réinitialiser l'input
-            }
-        }
+    const medicament = document.getElementById('medicament').value;
+    if (medicament) {
+        db.ref('medicaments/' + medicament).set({
+            nom: medicament,
+            disponible: false
+        }).then(() => {
+            console.log(`Médicament ${medicament} ajouté !`); // Confirmation dans la console
+        }).catch((error) => {
+            console.error("Erreur d'ajout : ", error); // Affiche l'erreur s'il y en a une
+        });
+        document.getElementById('medicament').value = ''; // Réinitialiser l'input
+    } else {
+        console.log("Veuillez entrer un nom de médicament."); // Message d'erreur
+    }
+}
 
         // Écoute des changements de disponibilité
         db.ref('medicaments').on('child_changed', (snapshot) => {
